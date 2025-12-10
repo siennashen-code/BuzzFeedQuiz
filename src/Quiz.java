@@ -9,15 +9,13 @@ public class Quiz {
         static Scanner sc = new Scanner(System.in);
 
         public static void main(String[] args) throws Exception {
-                //Declare Person object
-                Person user;
-                
-                //Create Personalities
+                // Create Personalities
                 Personality independent = new Personality("independent", "You find peace in being alone", 0);
                 Personality creative = new Personality("creative", "You like to see things differently from others", 1);
                 Personality charming = new Personality("charming", "Other people are naturally drawn to you", 2);
-                Personality adventurous = new Personality("adventurous", "You seek thrill and memorable experiences", 3);
-                
+                Personality adventurous = new Personality("adventurous", "You seek thrill and memorable experiences",
+                                3);
+
                 // Create Questions
                 Question q1 = new Question("1. Where will you be going?");
                 q1.possibleAnswers[0] = new Answer("I'm staying home", independent);
@@ -67,46 +65,65 @@ public class Quiz {
                 q8.possibleAnswers[2] = new Answer("The Grinch");
                 q8.possibleAnswers[3] = new Answer("The Nightmare Before Christmas");
 
-                // For each question, ask, read input, store answer.
-                gameIntro();
+                //Game Intro
+                System.out.println("-------* PLAN A WINTER VACATION AND FIND YOUR BEST FRIEND *-------");
+                System.out.println(
+                                "    Based on your results, we will pair you with a schoolmate who also took this quiz.");
+                System.out.println("Ready to begin? Press '1' to start");
+                game_intro();
                 
-                Question[] qList = { q1, q2, q3, q4, q5, q6, q7, q8};
+                // Get information to initialize user's profile
+                System.out.println("Enter your name:");
+                String name = get_name(sc);
+                System.out.println("Enter your phone number (press 'x' to skip):");
+                String phone_number = get_number(sc);
+
+                Person user = new Person(name, phone_number);
+
+                // Ask questions
+                Question[] qList = { q1, q2, q3, q4, q5, q6, q7, q8 };
                 for (Question q : qList) {
-                        q.ask(sc);
+                        q.ask(sc, user);
                 }
-
-                // Get most common category from the questions asked
-                // Return Category
-                // Category[] cList = { monopoly, catan, ers, hanabi };
-                // // these need to be in the same order or the points will be incorrect!
-                // int index = getMostPopularCatIndex(cList);
-                // System.out.println("If you were a board game, you would be " + cList[index].label + ". ");
-                // System.out.println(cList[index].description);
 
         }
 
-        public static void gameIntro() {
+        public static void game_intro() { // Forces user to input 1 to continue
                 // requires 1 to keep going
-                System.out.println("Which Board Game Are You?");
-                System.out.println("You get to choose numbers 1-4 for every question. Enter '1' to play!");
-                int play = sc.nextInt();
-                if (play != 1) {
-                        System.out.println("Unidentifiable input. Please enter '1' to play");
-                        gameIntro();
+                String play = sc.next();
+                if (!play.equals("1")) {
+                        System.out.println("** Unidentifiable input. Please enter '1' to play:");
+                        game_intro();
                 }
+
         }
 
-        // returns the index that is the max
-        // the tie breaker is the first Category that has the count is the "max" :/ 
-        // public static int getMostPopularCatIndex(Category[] counts) {
-        //         int maxCount = 0;
-        //         int maxIndex = 0;
-        //         for (int i = 0; i < counts.length; i++) {
-        //                 if (counts[i].points > maxCount) {
-        //                         maxCount = counts[i].points;
-        //                         maxIndex = i;
-        //                 }
-        //         }
-        //         return maxIndex;
-        // }
+        public static String get_name(Scanner sc) { // Forces user to input their name (all letters or spaces) to continue
+                String ans = sc.next();
+
+                if ( !(Checks.all_letters(ans)) ) {
+                        System.out.println("** Unidentifiable input. Please enter your name in  letters only:");
+                        ans = get_name(sc);
+                }
+
+                return ans;
+
+        }
+
+        public static String get_number(Scanner sc) { // Forces user to input a 10-digit phone number or skip to continue
+                String ans = sc.next();
+
+                if (ans.equals("x")) {
+                        ans = "NA";
+                } else if (!Checks.all_digits(ans)) {
+                        System.out.println("** Unidentifiable input. Please enter your 10-digit number in digits only (or 'x' to skip)");
+                        ans = get_number(sc);
+                } else if (ans.length() != 10){
+                        System.out.println("** Unidentifiable input. Enter your number in exactly 10 digits (or 'x' to skip)");
+                        ans = get_number(sc);
+                }
+
+                return ans;
+        }
+
 }
