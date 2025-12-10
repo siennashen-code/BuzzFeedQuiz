@@ -4,18 +4,22 @@
  * This is the class where we create the Quiz and run it. It has the main method.  
  */
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Quiz {
         static Scanner sc = new Scanner(System.in);
+        static ArrayList<Person> others = new ArrayList<Person>();
+        static Person user;
+
+        public static Personality independent = new Personality("independent", "You find peace in being alone", 0);
+        public static Personality creative = new Personality("creative", "You like to see things differently from others", 1);
+        public static Personality charming = new Personality("charming", "Other people are naturally drawn to you", 2);
+        public static Personality adventurous = new Personality("adventurous", "You seek thrill and memorable experiences",
+                                3);
 
         public static void main(String[] args) throws Exception {
                 // Create Personalities
-                Personality independent = new Personality("independent", "You find peace in being alone", 0);
-                Personality creative = new Personality("creative", "You like to see things differently from others", 1);
-                Personality charming = new Personality("charming", "Other people are naturally drawn to you", 2);
-                Personality adventurous = new Personality("adventurous", "You seek thrill and memorable experiences",
-                                3);
-
+                
                 // Create Questions
                 Question q1 = new Question("1. Where will you be going?");
                 q1.possibleAnswers[0] = new Answer("I'm staying home", independent);
@@ -61,16 +65,53 @@ public class Quiz {
 
                 Question q8 = new Question("8. What movie will you watch at night?");
                 q8.possibleAnswers[0] = new Answer("Home Alone 1");
-                q8.possibleAnswers[1] = new Answer("Home ALone 2");
+                q8.possibleAnswers[1] = new Answer("Home Alone 2");
                 q8.possibleAnswers[2] = new Answer("The Grinch");
                 q8.possibleAnswers[3] = new Answer("The Nightmare Before Christmas");
 
+                //Initialize the others ArrayList
+                int[] array = {1,0,3,1};
+                ArrayList<String> list = new ArrayList<String>();
+                list.add("Mac and Cheese");
+                list.add("Mario Kart");
+                list.add("Home Alone 1");
+
+                Person Zoe = new Person("Zoe", "1234567890", array, list);
+
+                int[] array1 = {1,2,1,1};
+                ArrayList<String> list1 = new ArrayList<String>();
+                list1.add("Mac and Cheese");
+                list1.add("Mario Kart");
+                list1.add("Home Alone 1");
+                Person Oliver = new Person("Oliver", "1234567890", array1, list1);
+
+                others.add(Zoe);
+                others.add(Oliver);
+
                 //Game Intro
+                game_intro();
+
+                // Ask questions
+                Question[] qList = { q1, q2, q3, q4, q5, q6, q7, q8 };
+                for (Question q : qList) {
+                        q.ask(sc);
+                }
+
+                //Get match
+                Person match = get_match();
+
+                System.out.println("Your match: " + match.name);
+                user.get_common_personalities(match);
+
+
+        }
+
+        public static void game_intro(){
                 System.out.println("-------* PLAN A WINTER VACATION AND FIND YOUR BEST FRIEND *-------");
                 System.out.println(
-                                "    Based on your results, we will pair you with a schoolmate who also took this quiz.");
+                                "             Based on your results, we will pair you with a schoolmate who also took this quiz.");
                 System.out.println("Ready to begin? Press '1' to start");
-                game_intro();
+                start_button();
                 
                 // Get information to initialize user's profile
                 System.out.println("Enter your name:");
@@ -78,22 +119,14 @@ public class Quiz {
                 System.out.println("Enter your phone number (press 'x' to skip):");
                 String phone_number = get_number(sc);
 
-                Person user = new Person(name, phone_number);
-
-                // Ask questions
-                Question[] qList = { q1, q2, q3, q4, q5, q6, q7, q8 };
-                for (Question q : qList) {
-                        q.ask(sc, user);
-                }
-
+                user = new Person(name, phone_number);
         }
-
-        public static void game_intro() { // Forces user to input 1 to continue
+        public static void start_button() { // Forces user to input 1 to continue
                 // requires 1 to keep going
                 String play = sc.next();
                 if (!play.equals("1")) {
                         System.out.println("** Unidentifiable input. Please enter '1' to play:");
-                        game_intro();
+                        start_button();
                 }
 
         }
@@ -124,6 +157,20 @@ public class Quiz {
                 }
 
                 return ans;
+        }
+
+        public static Person get_match(){
+                Person match = others.get(0);
+                double lowest = user.distance(others.get(0));
+                
+                for (Person other : others){//Find closest match
+                        if (user.distance(other) < lowest){
+                                lowest = user.distance(other);
+                                match = other;
+                        }
+                }
+
+                return match;
         }
 
 }
