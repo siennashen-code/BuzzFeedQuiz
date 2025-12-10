@@ -6,17 +6,15 @@
 public class Answer {
     String label;
     Personality personality;
-    String interest;
 
     // Constructors
-    Answer(String label, Personality personality) {
+    Answer(String label, Personality personality) { //For perosnality answers
         this.label = label; 
         this.personality = personality;
     }
 
-    Answer(String label, String interest) {
+    Answer(String label) { //For interest answers
         this.label = label; 
-        this.interest = interest;
     }
 
 }

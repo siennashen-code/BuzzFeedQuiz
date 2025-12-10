@@ -24,10 +24,11 @@ public class Question {
 
         int ans = sc.nextInt();
         Answer their_answer = possibleAnswers[ans-1];
+
         if (their_answer.personality != null){
             Person.usr_personality[their_answer.personality.index] ++;
         } else {
-            Person.usr_interests.add(their_answer.interest);
+            Person.usr_interests.add(their_answer.label);
         }
     }
 }
