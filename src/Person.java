@@ -44,9 +44,9 @@ public class Person {
         ArrayList<Personality> top_personalities = new ArrayList<Personality>(); // Array of the personalities with the
                                                                                  // most points
 
-        int top_count_1 = 0;
+        int top_count_1 = -10;
         int top_index_1 = 0;
-        int top_count_2 = 0;
+        int top_count_2 = -10;
         int top_index_2 = 0;
 
         for (int i = 0; i < usr_personality.length; i++) { // Add in personalities with the two highest points
@@ -55,7 +55,7 @@ public class Person {
                 top_index_1 = i;
             } else if (usr_personality[i] > top_count_2) {
                 top_count_2 = usr_personality[i];
-                top_count_2 = i;
+                top_index_2 = i;
             }
         }
 
@@ -98,5 +98,37 @@ public class Person {
 
         return common_personalities;
     }
+
+    ArrayList<String> get_common_interests(Person other){ // return ArrayList of common interests 
+        ArrayList<String> common_personalities = new ArrayList<String>();
+        for(int i = 0; i < usr_interests.size(); i++){
+            if (usr_interests.get(i).equals(other.usr_interests.get(i))){
+                common_personalities.add(usr_interests.get(i));
+            }
+        }
+
+        return common_personalities;
+
+    }
+
+    String condense_to_string(){
+        String row = "";
+        
+        row += this.name + ",";
+        row += this.phone_number + ",";
+
+        for(int count : usr_personality){
+            row += count + ",";
+        }
+
+        for(String interest : usr_interests){
+            row += interest + ",";
+        }
+
+        return row;
+    }
+
+
+
 
 }
