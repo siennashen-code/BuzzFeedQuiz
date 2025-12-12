@@ -3,20 +3,20 @@ import java.util.ArrayList;
 public class Person {
     String name;
     String phone_number;
-    int[] usr_personality;
+    int[] usr_personality_counts;
     ArrayList<String> usr_interests;
 
     Person(String name, String phone_number) {
         this.name = name;
         this.phone_number = phone_number;
-        this.usr_personality = new int[4];
+        this.usr_personality_counts = new int[4];
         this.usr_interests = new ArrayList<String>();
     }
 
     Person(String name, String phone_number, int[] usr_personality, ArrayList<String> usr_interests) {
         this.name = name;
         this.phone_number = phone_number;
-        this.usr_personality = usr_personality;
+        this.usr_personality_counts = usr_personality;
         this.usr_interests = usr_interests;
     }
 
@@ -24,8 +24,8 @@ public class Person {
                                     // smaller the double, the closer the people)
 
         double euclidean_d = 0;
-        for (int i = 0; i < usr_personality.length; i++) { // Calculate euclidean distance of personality arrays
-            euclidean_d += Math.pow(usr_personality[i] - other.usr_personality[i], 2);
+        for (int i = 0; i < usr_personality_counts.length; i++) { // Calculate euclidean distance of personality arrays
+            euclidean_d += Math.pow(usr_personality_counts[i] - other.usr_personality_counts[i], 2);
         }
         euclidean_d = Math.sqrt(euclidean_d);
 
@@ -48,12 +48,12 @@ public class Person {
         int top_count_2 = -1;
         int top_index_2 = 0;
 
-        for (int i = 0; i < usr_personality.length; i++) { // Add in personalities with the two highest points
-            if (usr_personality[i] > top_count_1) {
-                top_count_1 = usr_personality[i];
+        for (int i = 0; i < usr_personality_counts.length; i++) { // Add in personalities with the two highest points
+            if (usr_personality_counts[i] > top_count_1) {
+                top_count_1 = usr_personality_counts[i];
                 top_index_1 = i;
-            } else if (usr_personality[i] > top_count_2) {
-                top_count_2 = usr_personality[i];
+            } else if (usr_personality_counts[i] > top_count_2) {
+                top_count_2 = usr_personality_counts[i];
                 top_index_2 = i;
             }
         }
@@ -61,9 +61,9 @@ public class Person {
         top_personalities.add(Tools.index_to_personality(top_index_1));
         top_personalities.add(Tools.index_to_personality(top_index_2));
 
-        for (int i = 0; i < usr_personality.length; i++) { // Add in personalities that were tied with top personalities
+        for (int i = 0; i < usr_personality_counts.length; i++) { // Add in personalities that were tied with top personalities
             if (i != top_index_1 && i != top_index_2) {
-                if (usr_personality[i] == usr_personality[top_index_2]) {
+                if (usr_personality_counts[i] == usr_personality_counts[top_index_2]) {
                     top_personalities.add(Tools.index_to_personality(i));
                 }
             }

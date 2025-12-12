@@ -1,9 +1,10 @@
 
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.io.BufferedReader;
+
 
 // To read in and manipulate profile.csv
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 
@@ -40,10 +41,10 @@ public class Quiz {
                         String[] row = line.split(",");
                         Person person = new Person(row[0], row[1]);
 
-                        person.usr_personality[0] = Integer.parseInt(row[2]);
-                        person.usr_personality[1] = Integer.parseInt(row[3]);
-                        person.usr_personality[2] = Integer.parseInt(row[4]);
-                        person.usr_personality[3] = Integer.parseInt(row[5]);
+                        person.usr_personality_counts[0] = Integer.parseInt(row[2]);
+                        person.usr_personality_counts[1] = Integer.parseInt(row[3]);
+                        person.usr_personality_counts[2] = Integer.parseInt(row[4]);
+                        person.usr_personality_counts[3] = Integer.parseInt(row[5]);
 
                         person.usr_interests.add(row[6]);
                         person.usr_interests.add(row[7]);
@@ -80,28 +81,28 @@ public class Quiz {
                 q4.possibleAnswers[3] = new Answer("A shorthair cat", charming);
 
                 Question q5 = new Question("5. Who will you eat dinner with");
-                q5.possibleAnswers[0] = new Answer("My favorite actor", charming);
-                q5.possibleAnswers[1] = new Answer("My favorite artist", creative);
-                q5.possibleAnswers[2] = new Answer("My favorite athlete", adventurous);
-                q5.possibleAnswers[3] = new Answer("My favorite author", independent);
+                q5.possibleAnswers[0] = new Answer("Your favorite actor", charming);
+                q5.possibleAnswers[1] = new Answer("Your favorite artist", creative);
+                q5.possibleAnswers[2] = new Answer("Your favorite athlete", adventurous);
+                q5.possibleAnswers[3] = new Answer("Your favorite author", independent);
 
                 Question q6 = new Question("6. What will you be eating?");
-                q6.possibleAnswers[0] = new Answer("Mac and Cheese");
-                q6.possibleAnswers[1] = new Answer("Spaghetti");
-                q6.possibleAnswers[2] = new Answer("Chicken noodle soup");
-                q6.possibleAnswers[3] = new Answer("Steak");
+                q6.possibleAnswers[0] = new Answer("Mac and Cheese", "mac anc cheese");
+                q6.possibleAnswers[1] = new Answer("Spaghetti", "spaghetti");
+                q6.possibleAnswers[2] = new Answer("Chicken noodle soup", "chicken noodle soup");
+                q6.possibleAnswers[3] = new Answer("Steak", "steak");
 
                 Question q7 = new Question("7. What game will you play with your dinner-mate after?");
-                q7.possibleAnswers[0] = new Answer("Chess");
-                q7.possibleAnswers[1] = new Answer("Mario Kart");
-                q7.possibleAnswers[2] = new Answer("Jenga");
-                q7.possibleAnswers[3] = new Answer("Roblox");
+                q7.possibleAnswers[0] = new Answer("Chess", "chess");
+                q7.possibleAnswers[1] = new Answer("Mario Kart", "Mario Kart");
+                q7.possibleAnswers[2] = new Answer("Jenga", "Jenga");
+                q7.possibleAnswers[3] = new Answer("Roblox", "Roblox");
 
                 Question q8 = new Question("8. What movie will you watch at night?");
-                q8.possibleAnswers[0] = new Answer("Home Alone 1");
-                q8.possibleAnswers[1] = new Answer("Home Alone 2");
-                q8.possibleAnswers[2] = new Answer("The Grinch");
-                q8.possibleAnswers[3] = new Answer("The Nightmare Before Christmas");
+                q8.possibleAnswers[0] = new Answer("Home Alone 1", "Home Alone 1");
+                q8.possibleAnswers[1] = new Answer("Home Alone 2", "Home Alone 2");
+                q8.possibleAnswers[2] = new Answer("The Grinch", "The Grinch");
+                q8.possibleAnswers[3] = new Answer("The Nightmare Before Christmas", "The Nightmare Before Christmas");
 
                 // Game introduction
                 game_intro();
@@ -116,9 +117,11 @@ public class Quiz {
                 Person match = user.get_match();
                 print_summary(match);
 
+                // Add user data to profile.csv
                 FileWriter writer = new FileWriter(file, true);
                 writer.append("\n" + Tools.condense_to_string(user));
                 writer.close();
+        
         }
 
         public static void game_intro() {
@@ -137,17 +140,18 @@ public class Quiz {
                 user = new Person(name, phone_number);
         }
 
+        // Prints sentence containing a person's top personalities (and its description if description = true)
         public static void print_personality_summary(Person user, String subject, boolean description) {
                 ArrayList<Personality> top_personalities = user.get_top_personalities();
 
                 if (subject.equals("You")) {
                         System.out.print("You are ");
                 } else {
-                        System.out.print(subject + " is ");
+                        System.out.print(subject + " is");
                 }
 
                 if (top_personalities.size() == 2) {
-                        System.out.println(top_personalities.get(0).label + " and " + top_personalities.get(1).label
+                        System.out.print(" " + top_personalities.get(0).label + " and " + top_personalities.get(1).label
                                         + ".");
                 } else {
 
@@ -167,7 +171,7 @@ public class Quiz {
                         System.out.print(subject);
                         for (int i = 0; i < top_personalities.size(); i++) { // Print out desciptions of top
                                                                              // personalities
-                                if (subject.equals("You")) {
+                                if (subject.equals(" You")) {
                                         System.out.print(" " + user.get_top_personalities().get(i).description_2nd);
                                 } else {
                                         System.out.print(" " + user.get_top_personalities().get(i).description_3rd);
@@ -184,7 +188,7 @@ public class Quiz {
                 }
         }
 
-        public static void print_summary(Person other) {
+        public static void print_summary(Person other) { // Print final summary
                 System.out.println("---YOUR RESULTS---");
                 print_personality_summary(user, "You", true);
                 System.out.println("\n");
@@ -220,7 +224,7 @@ public class Quiz {
                                         " And guess what?! You both like " + common_interests.get(0) + " and "
                                                         + common_interests.get(1) + ".");
                 } else if (common_interests.size() == 3) {
-                        System.out.print("You both like ");
+                        System.out.print("You both like");
                         for (int i = 0; i < common_interests.size(); i++) {
                                 System.out.print(' ' + common_interests.get(i));
 

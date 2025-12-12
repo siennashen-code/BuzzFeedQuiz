@@ -5,7 +5,8 @@
 
 public class Answer {
     String label;
-    Personality personality;
+    Personality personality; //Personality answer can map to
+    String interest; //Interest answer can map to
 
     // Constructors
     Answer(String label, Personality personality) { //For perosnality answers
@@ -13,8 +14,11 @@ public class Answer {
         this.personality = personality;
     }
 
-    Answer(String label) { //For interest answers
+    Answer(String label, String interest) { //For interest answers
         this.label = label; 
+        this.interest = interest;
     }
+
+
 
 }

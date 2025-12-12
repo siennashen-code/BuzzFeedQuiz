@@ -96,7 +96,7 @@ public class Tools { // Some random methods that help declutter other classes
         row += user.name + ",";
         row += user.phone_number + ",";
 
-        for (int count : user.usr_personality) {
+        for (int count : user.usr_personality_counts) {
             row += count + ",";
         }
 

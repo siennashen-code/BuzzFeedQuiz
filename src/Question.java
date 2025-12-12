@@ -13,22 +13,22 @@ public class Question {
     void ask(Scanner sc) { 
         System.out.println(this.label);
         
-        // prints out all the answer choices
+        // Prints out all the answer choices
         for (int i = 0; i < this.possibleAnswers.length; i++) {
             String choice = Integer.toString(i + 1);
             System.out.println("[" + choice + "]: " +
                     this.possibleAnswers[i].label);
         }
 
-        // stores the number that user inputs
+        // Stores the number that user inputs
         int ans = Tools.get_int(sc);
         Answer their_answer = possibleAnswers[ans - 1];
 
-        // updates user profile based on answer
+        // Updates user profile based on answer
         if (their_answer.personality != null) {
-            Quiz.user.usr_personality[their_answer.personality.index]++;
+            Quiz.user.usr_personality_counts[their_answer.personality.index]++;
         } else {
-            Quiz.user.usr_interests.add(their_answer.label);
+            Quiz.user.usr_interests.add(their_answer.interest);
         }
     }
 
