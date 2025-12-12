@@ -2,13 +2,10 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 
 // To read in and manipulate profile.csv
 import java.io.FileReader;
 import java.io.FileWriter;
-
-import java.io.IOException;
 
 public class Quiz {
         static Scanner sc = new Scanner(System.in);
@@ -36,27 +33,26 @@ public class Quiz {
 
         public static void main(String[] args) throws Exception {
 
-                try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                                String[] row = line.split(",");
-                                Person person = new Person(row[0], row[1]);
+                // Read in CSV file into Person objects
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                String line = reader.readLine();
+                while (line != null) {
+                        String[] row = line.split(",");
+                        Person person = new Person(row[0], row[1]);
 
-                                person.usr_personality[0] = Integer.parseInt(row[2]);
-                                person.usr_personality[1] = Integer.parseInt(row[3]);
-                                person.usr_personality[2] = Integer.parseInt(row[4]);
-                                person.usr_personality[3] = Integer.parseInt(row[5]);
+                        person.usr_personality[0] = Integer.parseInt(row[2]);
+                        person.usr_personality[1] = Integer.parseInt(row[3]);
+                        person.usr_personality[2] = Integer.parseInt(row[4]);
+                        person.usr_personality[3] = Integer.parseInt(row[5]);
 
-                                person.usr_interests.add(row[6]);
-                                person.usr_interests.add(row[7]);
-                                person.usr_interests.add(row[8]);
+                        person.usr_interests.add(row[6]);
+                        person.usr_interests.add(row[7]);
+                        person.usr_interests.add(row[8]);
 
-                                others.add(person);
-                                reader.close();
-                        }
-                } catch (IOException e){
-                        e.printStackTrace();
+                        others.add(person);
+                        line = reader.readLine();
                 }
+                reader.close();
 
                 // Create Questions
                 Question q1 = new Question("1. Where will you be going?");
@@ -107,26 +103,7 @@ public class Quiz {
                 q8.possibleAnswers[2] = new Answer("The Grinch");
                 q8.possibleAnswers[3] = new Answer("The Nightmare Before Christmas");
 
-                // // Initialize the others ArrayList
-                // int[] array = { 1, 0, 3, 1 };
-                // ArrayList<String> list = new ArrayList<String>();
-                // list.add("Mac and Cheese");
-                // list.add("Mario Kart");
-                // list.add("Home Alone 1");
-
-                // Person Zoe = new Person("Zoe", "1234567890", array, list);
-
-                // int[] array1 = { 1, 2, 1, 1 };
-                // ArrayList<String> list1 = new ArrayList<String>();
-                // list1.add("Mac and Cheese");
-                // list1.add("Mario Kart");
-                // list1.add("Home Alone 1");
-                // Person Oliver = new Person("Oliver", "1234567890", array1, list1);
-
-                // others.add(Zoe);
-                // others.add(Oliver);
-
-                // Game Intro
+                // Game introduction
                 game_intro();
 
                 // Ask questions
@@ -136,108 +113,58 @@ public class Quiz {
                 }
 
                 // Get match
-                Person match = get_match();
+                Person match = user.get_match();
                 print_summary(match);
 
-                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-                writer.newLine();
-                writer.write(user.condense_to_string());
+                FileWriter writer = new FileWriter(file, true);
+                writer.append("\n" + Tools.condense_to_string(user));
                 writer.close();
-
         }
 
         public static void game_intro() {
                 System.out.println("-------* PLAN A WINTER VACATION AND FIND YOUR BEST FRIEND *-------");
                 System.out.println(
-                                "             Based on your results, we will pair you with a schoolmate who also took this quiz.");
-                System.out.println("Ready to begin? Press '1' to start");
-                start_button();
+                                "        Plan your dream vacation, and we will pair you with a schoolmate who also took this quiz.");
+                System.out.println("\nReady to begin? Press '1' to start");
+                Tools.get_1(sc);
 
                 // Get information to initialize user's profile
-                System.out.println("Enter your name:");
-                String name = get_name(sc);
+                System.out.println("Enter your first name:");
+                String name = Tools.get_name(sc);
                 System.out.println("Enter your phone number (press 'x' to skip):");
-                String phone_number = get_number(sc);
+                String phone_number = Tools.get_number(sc);
 
                 user = new Person(name, phone_number);
-        }
-
-        public static void start_button() { // Forces user to input 1 to continue
-                // requires 1 to keep going
-                String play = sc.next();
-                if (!play.equals("1")) {
-                        System.out.println("** Unidentifiable input. Please enter '1' to play:");
-                        start_button();
-                }
-
-        }
-
-        public static String get_name(Scanner sc) { // Forces user to input their name (all letters or spaces) to
-                                                    // continue
-                String ans = sc.next();
-
-                if (!(Checks.all_letters(ans))) {
-                        System.out.println("** Unidentifiable input. Please enter your name in  letters only:");
-                        ans = get_name(sc);
-                }
-
-                return ans;
-        }
-
-        public static String get_number(Scanner sc) { // Forces user to input a 10-digit phone number or skip to
-                                                      // continue
-                String ans = sc.next();
-
-                if (ans.equals("x")) {
-                        ans = "NA";
-                } else if (!Checks.all_digits(ans)) {
-                        System.out.println(
-                                        "** Unidentifiable input. Please enter your 10-digit number in digits only (or 'x' to skip)");
-                        ans = get_number(sc);
-                } else if (ans.length() != 10) {
-                        System.out.println(
-                                        "** Unidentifiable input. Enter your number in exactly 10 digits (or 'x' to skip)");
-                        ans = get_number(sc);
-                }
-
-                return ans;
-        }
-
-        public static Person get_match() {
-                Person match = others.get(0);
-                double lowest = user.distance(others.get(0));
-
-                for (Person other : others) {// Find closest match
-                        if (user.distance(other) < lowest) {
-                                lowest = user.distance(other);
-                                match = other;
-                        }
-                }
-
-                return match;
         }
 
         public static void print_personality_summary(Person user, String subject, boolean description) {
                 ArrayList<Personality> top_personalities = user.get_top_personalities();
 
                 if (subject.equals("You")) {
-                        System.out.print("You are");
+                        System.out.print("You are ");
                 } else {
-                        System.out.print(subject + " is");
+                        System.out.print(subject + " is ");
                 }
-                for (int j = 0; j < top_personalities.size(); j++) { // Print out personality labels
-                        System.out.print(" " + top_personalities.get(j).label);
-                        if (j == top_personalities.size() - 1) {
-                                System.out.print(".");
-                        } else if (j == top_personalities.size() - 2) {
-                                System.out.print(", and");
-                        } else {
-                                System.out.print(",");
+
+                if (top_personalities.size() == 2) {
+                        System.out.println(top_personalities.get(0).label + " and " + top_personalities.get(1).label
+                                        + ".");
+                } else {
+
+                        for (int j = 0; j < top_personalities.size(); j++) { // Print out personality labels
+                                System.out.print(" " + top_personalities.get(j).label);
+                                if (j == top_personalities.size() - 1) {
+                                        System.out.print(".");
+                                } else if (j == top_personalities.size() - 2) {
+                                        System.out.print(", and");
+                                } else {
+                                        System.out.print(",");
+                                }
                         }
                 }
 
                 if (description) {
-                        System.out.print(" " + subject);
+                        System.out.print(subject);
                         for (int i = 0; i < top_personalities.size(); i++) { // Print out desciptions of top
                                                                              // personalities
                                 if (subject.equals("You")) {

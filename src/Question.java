@@ -1,7 +1,3 @@
-
-/* Irene Feng 10/12/2022
-A question class with Answers.
-*/
 import java.util.Scanner;
 
 public class Question {
@@ -13,8 +9,8 @@ public class Question {
         this.label = label;
     }
 
-    // ask a question, and return the category that corresponds to the answer
-    void ask(Scanner sc) {
+    // Asks question and updates user profile based on their answer
+    void ask(Scanner sc) { 
         System.out.println(this.label);
         
         // prints out all the answer choices
@@ -25,7 +21,7 @@ public class Question {
         }
 
         // stores the number that user inputs
-        int ans = get_int(sc);
+        int ans = Tools.get_int(sc);
         Answer their_answer = possibleAnswers[ans - 1];
 
         // updates user profile based on answer
@@ -36,25 +32,8 @@ public class Question {
         }
     }
 
-    int get_int(Scanner sc){ //get user to input an acceptable integer
-        int ans;
-
-        if (!(sc.hasNextInt())) { //if user enters a non-integer
-            System.out.println("**Unidentifiable input. Please enter an integer between 1 and 4.");
-            sc.next();
-            ans = get_int(sc);
-        } else {
-            ans = sc.nextInt();
-        }
-        
-        if(ans<1||ans>4){ //if user's integer is out of bounds
-            System.out.println("**Unidentifiable input: Please enter an integer between 1 and 4.");
-            ans = get_int(sc);
-        }
-
-        return ans;
-    }
-
+    
+    
 
 
 }
