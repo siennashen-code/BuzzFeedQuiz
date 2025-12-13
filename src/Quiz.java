@@ -2,7 +2,6 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 
-
 // To read in and manipulate profile.csv
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -121,7 +120,7 @@ public class Quiz {
                 FileWriter writer = new FileWriter(file, true);
                 writer.append("\n" + Tools.condense_to_string(user));
                 writer.close();
-        
+
         }
 
         public static void game_intro() {
@@ -140,7 +139,8 @@ public class Quiz {
                 user = new Person(name, phone_number);
         }
 
-        // Prints sentence containing a person's top personalities (and its description if description = true)
+        // Prints sentence containing a person's top personalities (and its description
+        // if description = true)
         public static void print_personality_summary(Person user, String subject, boolean description) {
                 ArrayList<Personality> top_personalities = user.get_top_personalities();
 
@@ -168,10 +168,10 @@ public class Quiz {
                 }
 
                 if (description) {
-                        System.out.print(subject);
+                        System.out.print(" " + subject);
                         for (int i = 0; i < top_personalities.size(); i++) { // Print out desciptions of top
                                                                              // personalities
-                                if (subject.equals(" You")) {
+                                if (subject.equals("You")) {
                                         System.out.print(" " + user.get_top_personalities().get(i).description_2nd);
                                 } else {
                                         System.out.print(" " + user.get_top_personalities().get(i).description_3rd);
@@ -222,9 +222,9 @@ public class Quiz {
                 if (common_interests.size() == 2) { // Print out common interests
                         System.out.print(
                                         " And guess what?! You both like " + common_interests.get(0) + " and "
-                                                        + common_interests.get(1) + ".");
+                                                        + common_interests.get(1) + "!");
                 } else if (common_interests.size() == 3) {
-                        System.out.print("You both like");
+                        System.out.print(" Ang guess what?! You both like");
                         for (int i = 0; i < common_interests.size(); i++) {
                                 System.out.print(' ' + common_interests.get(i));
 
